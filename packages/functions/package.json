@@ -1,0 +1,16 @@
+{
+  "name": "@sst-zero/functions",
+  "type": "module",
+  "scripts": {
+    "tc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-eventbridge": "3.734.0",
+    "@openauthjs/openauth": "0.3.6",
+    "sst": "3.6.20"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.147",
+    "typescript": "5.7.3"
+  }
+}

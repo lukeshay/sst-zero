@@ -1,0 +1,34 @@
+{
+  "name": "sst-zero",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "deploy": "sst deploy",
+    "dev": "sst dev",
+    "upgrade": "ncu -u && bun run foreach bunx ncu -u",
+    "tc": "bun run foreach bun run tc",
+    "foreach": "bun run -b scripts/for-each.bun.ts",
+    "destroy-db": "bun run stop-db && rimraf .sst/storage/postgres",
+    "start-db": "docker compose up -d",
+    "start-db-hard": "docker compose up -d --build",
+    "stop-db": "docker compose down"
+  },
+  "devDependencies": {
+    "@total-typescript/tsconfig": "1.0.4",
+    "@types/bun": "1.2.1",
+    "@types/node": "22.12.0",
+    "@types/pg": "8.11.11",
+    "npm-check-updates": "17.1.14",
+    "pg": "8.13.1",
+    "rimraf": "6.0.1",
+    "sst": "3.6.20",
+    "typescript": "5.7.3"
+  },
+  "trustedDependencies": [
+    "@rocicorp/zero-sqlite3",
+    "esbuild",
+    "protobufjs"
+  ]
+}

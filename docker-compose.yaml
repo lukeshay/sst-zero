@@ -1,0 +1,31 @@
+services:
+  zero-database:
+    image: postgres:17.2-alpine3.20
+    command:
+      [
+        "postgres",
+        "-c",
+        "wal_level=logical",
+        "-c",
+        "max_wal_senders=10",
+        "-c",
+        "max_replication_slots=5",
+        "-c",
+        "hot_standby=true",
+        "-c",
+        "hot_standby_feedback=on",
+      ]
+    restart: always
+    healthcheck:
+      test: "pg_isready -U postgres --dbname=local"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "7004:5432"
+    volumes:
+      - ./.sst/storage/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: local

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@sst-zero/core": ["../packages/core/src/index.ts"],
+      "@sst-zero/core/*": ["../packages/core/src/*"],
+      "@sst-zero/zero-db": ["../packages/zero-db/src/index.ts"],
+      "@sst-zero/zero-db/*": ["../packages/zero-db/src/*"],
+      "@sst-zero/zero-schema": ["../packages/zero-schema/src/index.ts"],
+      "@sst-zero/zero-schema/*": ["../packages/zero-schema/src/*"]
+    }
+  }
+}

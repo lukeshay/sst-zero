@@ -1,0 +1,9 @@
+{
+  "extends": ["./tsconfig/tsconfig.no-dom.json"],
+  "compilerOptions": {
+    "types": ["@types/bun"],
+    "composite": true,
+    "noEmit": false
+  },
+  "include": ["**/*.bun.ts"]
+}

@@ -1,0 +1,7 @@
+[tools]
+node = "22"
+bun = "1.2.1"
+
+[env]
+AWS_PROFILE = "dev"
+AWS_REGION = "us-west-2"

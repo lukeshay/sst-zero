@@ -1,0 +1,20 @@
+{
+  "name": "@sst-zero/zero-db",
+  "type": "module",
+  "scripts": {
+    "tc": "tsc --noEmit",
+    "push": "sst shell drizzle-kit push",
+    "gen": "sst shell drizzle-kit generate",
+    "migrate": "sst shell drizzle-kit migrate"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.39.0",
+    "sst": "3.6.20"
+  },
+  "devDependencies": {
+    "@types/pg": "8.11.11",
+    "drizzle-kit": "0.30.3",
+    "pg": "8.13.1",
+    "typescript": "5.7.3"
+  }
+}

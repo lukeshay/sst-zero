@@ -1,0 +1,16 @@
+{
+  "name": "@sst-zero/zero-schema",
+  "type": "module",
+  "scripts": {
+    "tc": "tsc --noEmit",
+    "dev": "bun run ./scripts/dev.bun.ts"
+  },
+  "dependencies": {
+    "@rocicorp/zero": "0.12.2025012501",
+    "drizzle-zero": "0.3.0",
+    "sst": "3.6.20"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3"
+  }
+}
