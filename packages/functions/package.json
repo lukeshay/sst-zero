@@ -5,9 +5,9 @@
     "tc": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-eventbridge": "3.734.0",
+    "@aws-sdk/client-eventbridge": "3.740.0",
     "@openauthjs/openauth": "0.3.6",
-    "sst": "3.6.20"
+    "sst": "3.6.42"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.147",

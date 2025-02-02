@@ -1,5 +1,6 @@
 import { bus } from "./bus";
 import { zeroDatabase } from "./db";
+import { vpc } from "./vpc";
 
 bus.subscribe(
   "AuthUserCreate",
@@ -7,6 +8,7 @@ bus.subscribe(
     handler:
       "packages/functions/src/subscribers/sst-zero.auth.user.create.handler",
     link: [zeroDatabase],
+    vpc,
   },
   {
     pattern: {

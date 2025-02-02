@@ -1,4 +1,5 @@
 import { auth } from "./auth";
+import { dns, domain } from "./dns";
 import { zeroURL } from "./zero";
 
 export const web = new sst.aws.StaticSite("Web", {
@@ -6,6 +7,10 @@ export const web = new sst.aws.StaticSite("Web", {
   dev: {
     command: "bun run dev",
     url: "http://localhost:5173",
+  },
+  domain: {
+    name: domain,
+    dns,
   },
   build: {
     command: "bun run build",

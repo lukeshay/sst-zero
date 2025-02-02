@@ -14,7 +14,7 @@ import { merge } from "merge-anything";
 import { createValidatedStorage } from "./local-storage";
 import { removeNullValues } from "./objects";
 import { authClient } from "./auth";
-import { redirect, type ParsedLocation } from "@tanstack/react-router";
+import { redirect } from "@tanstack/react-router";
 
 const SessionSchema = object({
   tokens: object({
@@ -181,7 +181,9 @@ export const updateSessions = (sessions: SessionSchema[]) =>
     };
   });
 
-export async function parseAuthTokenFromHash(hash: string) {
+export async function parseAuthTokenFromHash(
+  hash: string,
+): Promise<SessionSchema | undefined> {
   const hashObj = Object.fromEntries(
     hash.split("&").map((pair) => pair.split("=")),
   );
@@ -204,6 +206,8 @@ export async function parseAuthTokenFromHash(hash: string) {
       } as const;
 
       addCurrentSession(s);
+
+      return s;
     }
 
     throw redirect({
@@ -213,8 +217,11 @@ export async function parseAuthTokenFromHash(hash: string) {
   }
 }
 
-export async function verifyCurrentSession() {
-  const session = getCurrentSession();
+export async function verifySession(
+  subOrSession?: SessionSchema | string,
+): Promise<SessionSchema | undefined> {
+  const session =
+    typeof subOrSession === "string" ? getSession(subOrSession) : subOrSession;
 
   if (!session) {
     return undefined;
@@ -238,10 +245,26 @@ export async function verifyCurrentSession() {
   } catch {}
 
   expireSession(session.subject.properties.id);
+
+  return session;
 }
 
-export async function handleLoadSession(hash: string) {
-  await parseAuthTokenFromHash(hash);
+export async function verifyCurrentSession(): Promise<
+  SessionSchema | undefined
+> {
+  const session = getCurrentSession();
+
+  return verifySession(session);
+}
+
+export async function handleLoadSession(
+  hash: string,
+): Promise<SessionSchema | undefined> {
+  const session = await parseAuthTokenFromHash(hash);
+
+  if (session) {
+    return session;
+  }
 
   return verifyCurrentSession();
 }

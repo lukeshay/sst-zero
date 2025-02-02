@@ -1,11 +1,12 @@
 import { bus } from "./bus";
+import { dns, domain } from "./dns";
 
 export const auth = new sst.aws.Auth("Auth", {
   authorizer: {
     handler: "packages/functions/src/auth.handler",
     link: [bus],
     environment: {
-      EMAIL_FROM: "shay.luke17@gmail.com",
+      EMAIL_FROM: "REPLACE_ME",
     },
     permissions: [
       {
@@ -13,6 +14,10 @@ export const auth = new sst.aws.Auth("Auth", {
         resources: ["*"],
       },
     ],
+  },
+  domain: {
+    name: $util.interpolate`auth.${domain}`,
+    dns,
   },
 });
 

@@ -1,6 +1,8 @@
 import { defineConfig } from "drizzle-kit";
 import { Resource } from "sst";
 
+console.log("======== MIGRATING DB ========");
+
 export default defineConfig({
   schema: ["./src/**/*.sql.ts", "./src/**/*.relations.ts"],
   dialect: "postgresql",
