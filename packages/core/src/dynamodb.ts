@@ -1,6 +1,6 @@
 import { getAWSClient } from "./aws";
 
-async function dynamo(action: string, payload: any) {
+async function dynamo(action: string, payload: unknown) {
   const client = await getAWSClient();
   const endpoint = `https://dynamodb.${client.region}.amazonaws.com`;
   const response = await client.fetch(endpoint, {
@@ -16,7 +16,7 @@ async function dynamo(action: string, payload: any) {
     throw new Error(`DynamoDB request failed: ${response.statusText}`);
   }
 
-  return response.json() as Promise<any>;
+  return response.json() as Promise<unknown>;
 }
 
 export namespace DynamoDB {
@@ -33,7 +33,7 @@ export namespace DynamoDB {
       },
     });
 
-  export const putItem = async (tableName: string, item: any) =>
+  export const putItem = async (tableName: string, item: unknown) =>
     dynamo("PutItem", {
       TableName: tableName,
       Item: item,

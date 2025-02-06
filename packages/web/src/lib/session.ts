@@ -1,7 +1,8 @@
 import { subjects } from "@sst-zero/core/subjects";
+import { merge } from "merge-anything";
 import {
-  boolean,
   type InferOutput,
+  boolean,
   literal,
   nullable,
   object,
@@ -9,12 +10,11 @@ import {
   record,
   string,
 } from "valibot";
-import { merge } from "merge-anything";
 
+import { redirect } from "@tanstack/react-router";
+import { authClient } from "./auth";
 import { createValidatedStorage } from "./local-storage";
 import { removeNullValues } from "./objects";
-import { authClient } from "./auth";
-import { redirect } from "@tanstack/react-router";
 
 const SessionSchema = object({
   tokens: object({
@@ -71,10 +71,7 @@ function set(
   const state = storage.getItem();
   const result = cb(state);
 
-  const ret = merge(
-    state,
-    removeNullValues<SessionsStorageSchema>(result as any),
-  );
+  const ret = merge(state, removeNullValues(result)) as SessionsStorageSchema;
 
   storage.setItem(ret);
 
@@ -279,6 +276,7 @@ export async function verifyCurrentSession(): Promise<
 }
 
 export async function handleLoadSession(
+  // biome-ignore lint/complexity/noBannedTypes: Need
   input: { code: string; state: string } | {},
 ): Promise<SessionSchema | undefined> {
   if ("code" in input) {

@@ -327,9 +327,7 @@
             "customType": null
           }
         },
-        "primaryKey": [
-          "id"
-        ]
+        "primaryKey": ["id"]
       },
       "user": {
         "name": "user",
@@ -360,21 +358,15 @@
             "customType": null
           }
         },
-        "primaryKey": [
-          "id"
-        ]
+        "primaryKey": ["id"]
       }
     },
     "relationships": {
       "draft": {
         "creator": [
           {
-            "sourceField": [
-              "createdBy"
-            ],
-            "destField": [
-              "id"
-            ],
+            "sourceField": ["createdBy"],
+            "destField": ["id"],
             "destSchema": "user",
             "cardinality": "one"
           }

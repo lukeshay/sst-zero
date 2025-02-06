@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig/tsconfig.no-dom.json",
+  "extends": "./tsconfig/no-dom.json",
   "references": [
     {
       "path": "./tsconfig.bun.json"

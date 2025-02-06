@@ -1,6 +1,6 @@
-import type { EventBridgeHandler } from "aws-lambda";
 import { zeroDatabase } from "@sst-zero/core/zero-database";
-import { usersTable, type User } from "@sst-zero/zero-db";
+import { type User, usersTable } from "@sst-zero/zero-db";
+import type { EventBridgeHandler } from "aws-lambda";
 
 type DateToString<T> = {
   [K in keyof T]: T[K] extends Date ? string : T[K];

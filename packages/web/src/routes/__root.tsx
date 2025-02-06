@@ -1,11 +1,11 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { useZeroClient } from "../lib/hooks";
 import { ZeroProvider } from "@rocicorp/zero/react";
-import { handleLoadSession } from "../lib/session";
-import { redirectToAuth } from "../lib/auth";
-import { object, union, string } from "valibot";
+import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { object, string, union } from "valibot";
 import { JSONDisplay } from "../components/cli/json-display";
+import { redirectToAuth } from "../lib/auth";
+import { useZeroClient } from "../lib/hooks";
+import { handleLoadSession } from "../lib/session";
 
 const Search = union([
   object({ code: string(), state: string() }),
@@ -50,7 +50,9 @@ function Component() {
         <Link to="/about" className="[&.active]:font-bold">
           About
         </Link>
-        <a onClick={redirectToAuth}>Sign In</a>
+        <button type="button" onClick={redirectToAuth}>
+          Sign In
+        </button>
       </div>
       <hr />
       {ctx.error && <JSONDisplay data={ctx.error} />}

@@ -1,7 +1,7 @@
 export type WithLogOptions = {
   name?: string;
 };
-export function withLog<TParams extends any[], TReturn extends any>(
+export function withLog<TParams extends unknown[], TReturn>(
   fn: (...args: TParams) => TReturn,
   options: WithLogOptions = {
     name: fn.name,

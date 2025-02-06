@@ -6,7 +6,8 @@
     "dev": "vite --open",
     "build": "vite build",
     "serve": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "format": "biome check --fix --unsafe ."
   },
   "dependencies": {
     "@openauthjs/openauth": "0.3.7",
@@ -15,10 +16,11 @@
     "merge-anything": "6.0.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sst": "3.7.14",
+    "sst": "3.7.15",
     "valibot": "1.0.0-beta.15"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@tanstack/router-devtools": "1.99.8",
     "@tanstack/router-plugin": "1.99.8",
     "@types/react": "19.0.8",

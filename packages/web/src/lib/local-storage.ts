@@ -1,4 +1,4 @@
-import { parse, ValiError, type BaseSchema, type InferOutput } from "valibot";
+import { type BaseSchema, type InferOutput, ValiError, parse } from "valibot";
 
 /**
  * Options for creating a validated storage object.

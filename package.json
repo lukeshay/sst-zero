@@ -1,14 +1,13 @@
 {
   "name": "sst-zero",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "scripts": {
     "deploy": "sst deploy",
     "dev": "sst dev",
     "upgrade": "ncu -u && bun run foreach bunx ncu -u",
     "tc": "bun run foreach bun run tc",
+    "format": "biome check --fix --unsafe ./infra ./*.json ./*.ts ./tsconfig/* && bun run foreach bun run format",
     "foreach": "bun run -b scripts/for-each.bun.ts",
     "destroy-db": "bun run stop-db && rimraf .sst/storage/postgres",
     "start-db": "docker compose up -d",
@@ -16,6 +15,7 @@
     "stop-db": "docker compose down"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@total-typescript/tsconfig": "1.0.4",
     "@types/bun": "1.2.2",
     "@types/node": "22.13.1",
@@ -23,10 +23,11 @@
     "npm-check-updates": "17.1.14",
     "pg": "8.13.1",
     "rimraf": "6.0.1",
-    "sst": "3.7.14",
+    "sst": "3.7.15",
     "typescript": "5.7.3"
   },
   "trustedDependencies": [
+    "@biomejs/biome",
     "@rocicorp/zero-sqlite3",
     "esbuild",
     "protobufjs"
@@ -34,5 +35,5 @@
   "engines": {
     "node": "22.x"
   },
-  "packageManager": "bun@1.2.1"
+  "packageManager": "bun@1.2.2"
 }

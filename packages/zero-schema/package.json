@@ -3,14 +3,16 @@
   "type": "module",
   "scripts": {
     "tc": "tsc --noEmit",
-    "dev": "bun run ./scripts/dev.bun.ts"
+    "dev": "bun run ./scripts/dev.bun.ts",
+    "format": "biome check --fix --unsafe ."
   },
   "dependencies": {
     "@rocicorp/zero": "0.13.2025013101",
-    "drizzle-zero": "0.4.0",
-    "sst": "3.7.14"
+    "drizzle-zero": "0.3.1",
+    "sst": "3.7.15"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "typescript": "5.7.3"
   }
 }

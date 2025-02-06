@@ -1,7 +1,7 @@
 #!/user/bin/env bun
 
-import { Resource } from "sst/resource";
 import { Client } from "pg";
+import { Resource } from "sst/resource";
 
 async function createDatabaseIfNotExists(
   client: Client,

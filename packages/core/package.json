@@ -2,15 +2,17 @@
   "name": "@sst-zero/core",
   "type": "module",
   "scripts": {
-    "tc": "tsc --noEmit"
+    "tc": "tsc --noEmit",
+    "format": "biome check --fix --unsafe ."
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "3.741.0",
+    "@aws-sdk/client-ses": "3.743.0",
     "@openauthjs/openauth": "0.3.7",
-    "sst": "3.7.14",
+    "sst": "3.7.15",
     "valibot": "1.0.0-beta.15"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "typescript": "5.7.3"
   }
 }

@@ -30,6 +30,7 @@ Before getting started, ensure you have:
 - [Node.js](https://nodejs.org/) version **22.x**
 - [AWS CLI](https://aws.amazon.com/cli/) (configured with your credentials)
 - [Bun](https://bun.sh/) installed (see instructions below)
+- [Docker](https://www.docker.com/) installed and running
 
 _Note: SST is installed as a local dependency, so you do not need to install it globally._
 
@@ -86,6 +87,23 @@ Clone the repository and install the dependencies using Bun:
 git clone https://github.com/lukeshay/sst-zero.git
 cd sst-zero
 bun install
+```
+
+## Environment Variables
+
+The following environment variables are required for the application to run:
+
+```
+DOMAIN=""
+
+# DNS
+
+CLOUDFLARE_API_TOKEN=""
+CLOUDFLARE_ZONE_ID=""
+
+# OR
+
+ROUTE53_HOSTED_ZONE_ID=""
 ```
 
 ## Development

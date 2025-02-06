@@ -1,8 +1,8 @@
+import { useQuery } from "@rocicorp/zero/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { JSONDisplay } from "../components/cli/json-display";
-import { getSessions } from "../lib/session";
 import { useZero } from "../lib/hooks";
-import { useQuery } from "@rocicorp/zero/react";
+import { getSessions } from "../lib/session";
 
 export const Route = createFileRoute("/")({
   component: Index,

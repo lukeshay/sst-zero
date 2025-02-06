@@ -1,6 +1,6 @@
 import { nonProd } from "./const";
-import { vpc } from "./vpc";
 import { dcp } from "./dcp";
+import { vpc } from "./vpc";
 
 export const zeroDatabase = new sst.aws.Postgres(
   "ZeroDatabase",

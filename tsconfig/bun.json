@@ -1,0 +1,6 @@
+{
+  "extends": ["./no-dom.json"],
+  "compilerOptions": {
+    "types": ["@types/bun"]
+  }
+}

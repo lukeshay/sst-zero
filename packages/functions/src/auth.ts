@@ -1,18 +1,18 @@
-import { handle } from "hono/aws-lambda";
-import { issuer } from "@openauthjs/openauth";
-import { CodeProvider } from "@openauthjs/openauth/provider/code";
-import { CodeUI } from "@openauthjs/openauth/ui/code";
-import { subjects } from "@sst-zero/core/subjects";
-import { DynamoDB } from "@sst-zero/core/dynamodb";
-import { Email } from "@sst-zero/core/email";
-import { withLog } from "@sst-zero/core/logging";
 import {
   EventBridgeClient,
   PutEventsCommand,
 } from "@aws-sdk/client-eventbridge";
-import { Resource } from "sst/resource";
+import { issuer } from "@openauthjs/openauth";
+import { CodeProvider } from "@openauthjs/openauth/provider/code";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
+import { CodeUI } from "@openauthjs/openauth/ui/code";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
+import { DynamoDB } from "@sst-zero/core/dynamodb";
+import { Email } from "@sst-zero/core/email";
+import { withLog } from "@sst-zero/core/logging";
+import { subjects } from "@sst-zero/core/subjects";
+import { handle } from "hono/aws-lambda";
+import { Resource } from "sst/resource";
 import { maxLength, minLength, pipe, regex, string } from "valibot";
 
 const eb = new EventBridgeClient({});

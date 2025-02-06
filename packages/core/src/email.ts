@@ -1,4 +1,5 @@
-import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { Resource } from "sst/resource";
 
 export namespace Email {
   const client = new SESClient();
@@ -13,6 +14,8 @@ export namespace Email {
     text?: string;
   };
 
+  const DEFAULT_FROM = `noreply@${Resource.Email.sender}`;
+
   export async function send(input: Send) {
     await client.send(
       new SendEmailCommand({
@@ -21,7 +24,7 @@ export namespace Email {
           CcAddresses: typeof input.cc === "string" ? [input.cc] : input.cc,
           BccAddresses: typeof input.bcc === "string" ? [input.bcc] : input.bcc,
         },
-        Source: input.from ?? process.env.EMAIL_FROM,
+        Source: input.from ?? DEFAULT_FROM,
         Message: {
           Subject: {
             Data: input.subject,

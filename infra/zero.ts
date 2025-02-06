@@ -1,10 +1,10 @@
+import { readFileSync } from "node:fs";
 import { cwd } from "node:process";
+import { auth } from "./auth";
 import { nonProd } from "./const";
 import { zeroDatabase } from "./db";
-import { vpc } from "./vpc";
-import { auth } from "./auth";
-import { readFileSync } from "node:fs";
 import { dns, domain } from "./dns";
+import { vpc } from "./vpc";
 
 const connectionString = $util.interpolate`postgresql://${zeroDatabase.username}:${zeroDatabase.password}@${zeroDatabase.host}:${zeroDatabase.port}/${zeroDatabase.database}`;
 
@@ -67,7 +67,7 @@ if ($dev) {
   });
 
   const tag = $dev
-    ? `latest`
+    ? "latest"
     : JSON.parse(
         readFileSync("./node_modules/@rocicorp/zero/package.json").toString(),
       ).version.replace("+", "-");
@@ -181,7 +181,7 @@ if ($dev) {
             ZERO_NUM_SYNC_WORKERS: "1",
           }
         : {
-            ZERO_CHANGE_STREAMER_URI: replicationManager!.url.apply((val) =>
+            ZERO_CHANGE_STREAMER_URI: replicationManager?.url.apply((val) =>
               val.replace("http://", "ws://"),
             ),
             ZERO_UPSTREAM_MAX_CONNS: "15",

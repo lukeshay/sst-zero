@@ -1,12 +1,13 @@
 import {
-  definePermissions,
+  type Condition,
   type ExpressionBuilder,
-  type Row,
   NOBODY_CAN,
+  type Row,
+  definePermissions,
 } from "@rocicorp/zero";
 import type { Subjects } from "@sst-zero/core/subjects";
-import * as drizzleSchema from "../../zero-db/src";
 import { createZeroSchema } from "drizzle-zero";
+import * as drizzleSchema from "../../zero-db/src";
 
 export type AuthData = {
   sub: string | null;
@@ -41,7 +42,7 @@ export type Draft = Row<typeof schema.tables.draft>;
 export type PermissionRule<
   TSchema extends Schema,
   TTable extends keyof TSchema["tables"] & string,
-> = (authData: AuthData, eb: ExpressionBuilder<TSchema, TTable>) => any;
+> = (authData: AuthData, eb: ExpressionBuilder<TSchema, TTable>) => Condition;
 
 function and<
   TSchema extends Schema,

@@ -57,12 +57,8 @@
           "name": "draft_createdBy_user_id_fk",
           "tableFrom": "draft",
           "tableTo": "user",
-          "columnsFrom": [
-            "createdBy"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["createdBy"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

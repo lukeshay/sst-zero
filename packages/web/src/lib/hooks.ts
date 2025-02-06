@@ -1,8 +1,8 @@
-import { type Schema, schema } from "@sst-zero/zero-schema";
-import { useZero as useZ } from "@rocicorp/zero/react";
 import { Zero } from "@rocicorp/zero";
-import type { SessionSchema } from "./session";
+import { useZero as useZ } from "@rocicorp/zero/react";
+import { type Schema, schema } from "@sst-zero/zero-schema";
 import { useRouter } from "@tanstack/react-router";
+import type { SessionSchema } from "./session";
 
 export const useZero = useZ<Schema>;
 
