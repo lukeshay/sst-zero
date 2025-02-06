@@ -6,7 +6,7 @@ export const auth = new sst.aws.Auth("Auth", {
     handler: "packages/functions/src/auth.handler",
     link: [bus],
     environment: {
-      EMAIL_FROM: "REPLACE_ME",
+      EMAIL_FROM: process.env.EMAIL_FROM!,
     },
     permissions: [
       {

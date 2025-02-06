@@ -6,9 +6,9 @@
     "dev": "bun run ./scripts/dev.bun.ts"
   },
   "dependencies": {
-    "@rocicorp/zero": "0.12.2025012501",
-    "drizzle-zero": "0.3.0",
-    "sst": "3.6.42"
+    "@rocicorp/zero": "0.13.2025013101",
+    "drizzle-zero": "0.4.0",
+    "sst": "3.7.14"
   },
   "devDependencies": {
     "typescript": "5.7.3"

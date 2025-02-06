@@ -5,11 +5,12 @@
     "tc": "tsc --noEmit",
     "push": "sst shell drizzle-kit push",
     "gen": "sst shell drizzle-kit generate",
-    "migrate": "sst shell drizzle-kit migrate"
+    "migrate": "sst shell drizzle-kit migrate",
+    "studio": "sst shell drizzle-kit studio"
   },
   "dependencies": {
-    "drizzle-orm": "0.39.1",
-    "sst": "3.6.42"
+    "drizzle-orm": "0.39.2",
+    "sst": "3.7.14"
   },
   "devDependencies": {
     "@types/pg": "8.11.11",

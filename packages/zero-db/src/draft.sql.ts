@@ -1,5 +1,5 @@
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
-import { AUDIT_FIELDS_CREATOR_CASCADE } from "./fields/audit-fields-creator-cascade.js";
+import { AUDIT_FIELDS_CREATOR_CASCADE } from "./fields/audit-fields-creator-cascade";
 
 export const draftsTable = pgTable("draft", {
   id: uuid("id").primaryKey(),

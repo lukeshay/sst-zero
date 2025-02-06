@@ -1,5 +1,5 @@
 export const dns = sst.cloudflare.dns({
-  zone: "REPLACE_ME",
+  zone: process.env.CLOUDFLARE_ZONE_ID!,
 });
 
 export const domain = [

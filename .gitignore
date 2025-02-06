@@ -1,6 +1,6 @@
 .sst/
 node_modules/
 output/
-zero-schema.json
 *.db
 *.db-*
+.env*

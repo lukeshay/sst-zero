@@ -1,8 +1,6 @@
 import { nonProd } from "./const";
 import { vpc } from "./vpc";
 import { dcp } from "./dcp";
-import { resolve } from "node:path";
-import { cwd } from "node:process";
 
 export const zeroDatabase = new sst.aws.Postgres(
   "ZeroDatabase",
@@ -22,34 +20,31 @@ export const zeroDatabase = new sst.aws.Postgres(
   },
 );
 
-// const init = new command.local.Command("ZeroInit", {
-//   create: "sst shell bun run ./scripts/init-db.bun.ts",
-//   dir: cwd(),
-//   environment: {
-//     SST_RESOURCE_ZeroDatabase: $util.jsonStringify(zeroDatabase.getSSTLink()),
-//   },
-// });
-
-new command.local.Command(
-  "ZeroMigrate",
-  {
-    create: "bun run migrate",
-    dir: resolve(cwd(), "packages/zero-db"),
-    environment: {
-      SST_RESOURCE_ZeroDatabase: $util.jsonStringify(zeroDatabase.getSSTLink()),
+const migrator = new sst.aws.Function("DatabaseMigrator", {
+  handler: "packages/functions/src/migrator.handler",
+  link: [zeroDatabase],
+  vpc,
+  copyFiles: [
+    {
+      from: "packages/zero-db/drizzle",
+      to: "./drizzle",
     },
-    triggers: [new Date()],
-  },
-  // {
-  //   dependsOn: [init],
-  // },
-);
+  ],
+});
 
-// new sst.x.DevCommand("DrizzleStudio", {
-//   dev: {
-//     command: "bunx sst shell drizzle-kit studio",
-//     directory: "packages/zero-db",
-//     title: "Drizzle Studio",
-//   },
-//   link: [zeroDatabase],
-// });
+if (!$dev) {
+  new aws.lambda.Invocation("DatabaseMigratorInvocation", {
+    input: Date.now().toString(),
+    functionName: migrator.name,
+  });
+}
+
+new sst.x.DevCommand("DrizzleStudio", {
+  dev: {
+    autostart: false,
+    command: "bun run studio",
+    directory: "packages/zero-db",
+    title: "Drizzle Studio",
+  },
+  link: [zeroDatabase],
+});

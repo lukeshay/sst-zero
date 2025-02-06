@@ -5,9 +5,11 @@
     "tc": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-eventbridge": "3.740.0",
-    "@openauthjs/openauth": "0.3.6",
-    "sst": "3.6.42"
+    "@aws-sdk/client-eventbridge": "3.741.0",
+    "@openauthjs/openauth": "0.3.7",
+    "drizzle-orm": "0.39.2",
+    "sst": "3.7.14",
+    "valibot": "1.0.0-beta.15"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.147",

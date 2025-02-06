@@ -5,11 +5,15 @@ import { CodeUI } from "@openauthjs/openauth/ui/code";
 import { subjects } from "@sst-zero/core/subjects";
 import { DynamoDB } from "@sst-zero/core/dynamodb";
 import { Email } from "@sst-zero/core/email";
+import { withLog } from "@sst-zero/core/logging";
 import {
   EventBridgeClient,
   PutEventsCommand,
 } from "@aws-sdk/client-eventbridge";
 import { Resource } from "sst/resource";
+import { PasswordProvider } from "@openauthjs/openauth/provider/password";
+import { PasswordUI } from "@openauthjs/openauth/ui/password";
+import { maxLength, minLength, pipe, regex, string } from "valibot";
 
 const eb = new EventBridgeClient({});
 
@@ -22,15 +26,31 @@ const app = issuer({
   providers: {
     code: CodeProvider(
       CodeUI({
-        sendCode: async (claims, code) => {
-          console.log({ code, claims });
-
+        sendCode: withLog(async function sendCodeCode(claims, code) {
           await Email.send({
             to: claims.email!,
             subject: "Your auth code",
             text: `Your auth code is ${code}`,
           });
-        },
+        }),
+      }),
+    ),
+    password: PasswordProvider(
+      PasswordUI({
+        sendCode: withLog(async function sendEmailCode(email, code) {
+          await Email.send({
+            to: email,
+            subject: "Your auth code",
+            text: `Your auth code is ${code}`,
+          });
+        }),
+        validatePassword: pipe(
+          string(),
+          minLength(12, "Password must be at least 12 characters"),
+          maxLength(64, "Password must be less than 65 characters"),
+          regex(/[A-Z]/, "Password must contain a capital letter"),
+          regex(/[a-z]/, "Password must contain a lowercase letter"),
+        ),
       }),
     ),
   },
@@ -47,12 +67,13 @@ const app = issuer({
 
     let detailType = "user.signin";
 
+    const email =
+      value.provider === "password" ? value.email : value.claims.email!;
+
+    console.log({ email });
+
     try {
-      const res = await DynamoDB.getItem(
-        table,
-        `user#${value.claims.email}`,
-        value.claims.email!,
-      );
+      const res = await DynamoDB.getItem(table, `user#${email}`, email);
 
       user = JSON.parse(res.Item.value.S);
     } catch {
@@ -60,7 +81,7 @@ const app = issuer({
 
       user = {
         id,
-        email: value.claims.email!,
+        email,
         createdBy: id,
         createdAt: new Date().toISOString(),
         updatedBy: id,
@@ -68,8 +89,12 @@ const app = issuer({
       };
 
       await DynamoDB.putItem(table, {
-        pk: { S: `user#${value.claims.email}` },
-        sk: { S: value.claims.email! },
+        pk: {
+          S: `user#${email}`,
+        },
+        sk: {
+          S: email,
+        },
         value: {
           S: JSON.stringify(user),
         },

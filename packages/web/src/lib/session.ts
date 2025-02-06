@@ -112,6 +112,10 @@ export const setCurrentSession = (sub: string) =>
 
 export const expireSession = (sub: string) =>
   set((state) => ({
+    currentSession:
+      state.currentSession?.subject.properties.id === sub
+        ? { ...state.currentSession, expired: true }
+        : state.currentSession,
     sessions: {
       [sub]: {
         ...state.sessions[sub]!,
@@ -181,40 +185,55 @@ export const updateSessions = (sessions: SessionSchema[]) =>
     };
   });
 
-export async function parseAuthTokenFromHash(
-  hash: string,
-): Promise<SessionSchema | undefined> {
-  const hashObj = Object.fromEntries(
-    hash.split("&").map((pair) => pair.split("=")),
-  );
+export async function parseAuthTokenFromCode({
+  code,
+  state,
+}: {
+  code: string;
+  state: string;
+}): Promise<SessionSchema | undefined> {
+  const challenge = JSON.parse(localStorage.getItem("challenge")!);
 
-  if (hashObj.access_token) {
-    const verified = await authClient.verify(subjects, hashObj.access_token, {
-      refresh: decodeURIComponent(hashObj.refresh_token),
-    });
-
-    if (!verified.err) {
-      const s = {
-        subject: verified.subject,
-        aud: verified.aud,
-        tokens: {
-          refresh:
-            verified.tokens?.refresh ??
-            decodeURIComponent(hashObj.refresh_token),
-          access: verified.tokens?.access ?? hashObj.access_token,
-        },
-      } as const;
-
-      addCurrentSession(s);
-
-      return s;
-    }
-
+  if ("state" in challenge && challenge.state !== state) {
     throw redirect({
-      to: location.pathname,
+      to: window.location.pathname,
       replace: true,
     });
   }
+
+  const exchanged = await authClient.exchange(
+    code,
+    window.location.origin,
+    challenge.verifier,
+  );
+
+  if (exchanged.err) {
+    throw redirect({
+      to: window.location.pathname,
+      replace: true,
+    });
+  }
+
+  const verified = await authClient.verify(subjects, exchanged.tokens.access, {
+    refresh: exchanged.tokens.refresh,
+  });
+
+  if (!verified.err) {
+    const s = {
+      subject: verified.subject,
+      aud: verified.aud,
+      tokens: verified.tokens ?? exchanged.tokens,
+    } as const;
+
+    addCurrentSession(s);
+
+    return s;
+  }
+
+  throw redirect({
+    to: window.location.pathname,
+    replace: true,
+  });
 }
 
 export async function verifySession(
@@ -246,6 +265,8 @@ export async function verifySession(
 
   expireSession(session.subject.properties.id);
 
+  session.expired = true;
+
   return session;
 }
 
@@ -258,12 +279,10 @@ export async function verifyCurrentSession(): Promise<
 }
 
 export async function handleLoadSession(
-  hash: string,
+  input: { code: string; state: string } | {},
 ): Promise<SessionSchema | undefined> {
-  const session = await parseAuthTokenFromHash(hash);
-
-  if (session) {
-    return session;
+  if ("code" in input) {
+    return parseAuthTokenFromCode(input);
   }
 
   return verifyCurrentSession();

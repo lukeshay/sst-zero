@@ -5,10 +5,10 @@
     "tc": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "3.738.0",
-    "@openauthjs/openauth": "0.3.6",
-    "sst": "3.6.42",
-    "valibot": "1.0.0-beta.14"
+    "@aws-sdk/client-ses": "3.741.0",
+    "@openauthjs/openauth": "0.3.7",
+    "sst": "3.7.14",
+    "valibot": "1.0.0-beta.15"
   },
   "devDependencies": {
     "typescript": "5.7.3"

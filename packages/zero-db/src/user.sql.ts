@@ -1,5 +1,5 @@
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
-import { AUDIT_FIELDS } from "./fields/audit-fields.js";
+import { AUDIT_FIELDS } from "./fields/audit-fields";
 
 export const usersTable = pgTable("user", {
   id: uuid("id").primaryKey(),

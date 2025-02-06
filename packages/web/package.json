@@ -9,23 +9,23 @@
     "start": "vite"
   },
   "dependencies": {
-    "@openauthjs/openauth": "0.3.6",
-    "@rocicorp/zero": "0.12.2025012501",
-    "@tanstack/react-router": "1.98.4",
+    "@openauthjs/openauth": "0.3.7",
+    "@rocicorp/zero": "0.13.2025013101",
+    "@tanstack/react-router": "1.99.8",
     "merge-anything": "6.0.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "sst": "3.6.42",
-    "valibot": "1.0.0-beta.14"
+    "sst": "3.7.14",
+    "valibot": "1.0.0-beta.15"
   },
   "devDependencies": {
-    "@tanstack/router-devtools": "1.98.4",
-    "@tanstack/router-plugin": "1.98.6",
+    "@tanstack/router-devtools": "1.99.8",
+    "@tanstack/router-plugin": "1.99.8",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "@vitejs/plugin-react": "4.3.4",
     "typescript": "5.7.3",
-    "vite": "6.0.11",
+    "vite": "6.1.0",
     "vite-tsconfig-paths": "5.1.4"
   }
 }

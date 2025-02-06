@@ -65,8 +65,16 @@ if ($dev) {
   const replicationBucket = new sst.aws.Bucket("ZeroReplicationBucket", {
     public: false,
   });
+
+  const tag = $dev
+    ? `latest`
+    : JSON.parse(
+        readFileSync("./node_modules/@rocicorp/zero/package.json").toString(),
+      ).version.replace("+", "-");
+  const image = `registry.hub.docker.com/rocicorp/zero:${tag}`;
+
   const commonEnv = {
-    AWS_REGION: process.env.AWS_REGION!,
+    NO_COLOR: "1",
     ZERO_SCHEMA_JSON: schemaJson,
     ZERO_LOG_FORMAT: "json",
     ZERO_REPLICA_FILE: "sync-replica.db",
@@ -77,60 +85,62 @@ if ($dev) {
     ZERO_AUTH_JWKS_URL: $util.interpolate`${auth.url}/.well-known/jwks.json`,
   };
 
-  const replicationManager = cluster.addService("ZeroReplicationManager", {
-    link: [zeroDatabase, replicationBucket],
-    image: "rocicorp/zero:canary",
-    loadBalancer: {
-      public: false,
-      domain: {
-        name: $util.interpolate`zerorm.${domain}`,
-        dns,
-      },
-      ports: [
-        {
-          listen: "80/http",
-          forward: "4849/http",
+  const replicationManager = !$dev
+    ? cluster.addService("ZeroReplicationManager", {
+        link: [zeroDatabase, replicationBucket],
+        image,
+        loadBalancer: {
+          public: false,
+          domain: {
+            name: $util.interpolate`zerorm.${domain}`,
+            dns,
+          },
+          ports: [
+            {
+              listen: "80/http",
+              forward: "4849/http",
+            },
+            {
+              listen: "443/https",
+              forward: "4849/http",
+            },
+          ],
         },
-        {
-          listen: "443/https",
-          forward: "4849/http",
+        scaling: {
+          min: nonProd ? 1 : 2,
+          max: nonProd ? 1 : 4,
         },
-      ],
-    },
-    scaling: {
-      min: nonProd ? 1 : 2,
-      max: nonProd ? 1 : 4,
-    },
-    memory: nonProd ? "4 GB" : "8 GB",
-    cpu: nonProd ? "1 vCPU" : "2 vCPU",
-    capacity: nonProd ? "spot" : undefined,
-    health: {
-      command: ["CMD-SHELL", "curl -f http://localhost:4849/ || exit 1"],
-      interval: "5 seconds",
-      retries: 3,
-      startPeriod: "300 seconds",
-    },
-    environment: {
-      ...commonEnv,
-      ZERO_CHANGE_MAX_CONNS: "3",
-      ZERO_NUM_SYNC_WORKERS: "0",
-    },
-    transform: {
-      loadBalancer: {
-        idleTimeout: 3600,
-      },
-      target: {
-        healthCheck: {
-          enabled: true,
-          path: "/keepalive",
-          protocol: "HTTP",
-          interval: 5,
-          healthyThreshold: 2,
-          timeout: 3,
+        memory: nonProd ? "4 GB" : "8 GB",
+        cpu: nonProd ? "1 vCPU" : "2 vCPU",
+        capacity: nonProd ? "spot" : undefined,
+        health: {
+          command: ["CMD-SHELL", "curl -f http://localhost:4849/ || exit 1"],
+          interval: "5 seconds",
+          retries: 3,
+          startPeriod: "300 seconds",
         },
-      },
-    },
-  });
+        environment: {
+          ...commonEnv,
+          ZERO_CHANGE_MAX_CONNS: "3",
+          ZERO_NUM_SYNC_WORKERS: "0",
+        },
+        transform: {
+          loadBalancer: {
+            idleTimeout: 3600,
+          },
+          target: {
+            healthCheck: {
+              enabled: true,
+              path: "/keepalive",
+              protocol: "HTTP",
+              interval: 5,
+              healthyThreshold: 2,
+              timeout: 3,
+            },
+          },
+        },
+      })
+    : undefined;
 
   const service = cluster.addService("ZeroViewSyncer", {
     image: "rocicorp/zero:canary",
@@ -166,9 +176,17 @@ if ($dev) {
     },
     environment: {
       ...commonEnv,
-      ZERO_CHANGE_STREAMER_URI: replicationManager.url,
-      ZERO_UPSTREAM_MAX_CONNS: "15",
-      ZERO_CVR_MAX_CONNS: "160",
+      ...($dev
+        ? {
+            ZERO_NUM_SYNC_WORKERS: "1",
+          }
+        : {
+            ZERO_CHANGE_STREAMER_URI: replicationManager!.url.apply((val) =>
+              val.replace("http://", "ws://"),
+            ),
+            ZERO_UPSTREAM_MAX_CONNS: "15",
+            ZERO_CVR_MAX_CONNS: "160",
+          }),
     },
     transform: {
       target: {
@@ -188,7 +206,12 @@ if ($dev) {
         loadBalancingAlgorithmType: "least_outstanding_requests",
       },
     },
-    link: [replicationBucket],
+    link: [zeroDatabase, replicationBucket],
+    dev: {
+      command: "bun run dev",
+      directory: "packages/zero-schema",
+      url: "http://localhost:4848",
+    },
   });
 
   zeroURL = service.url;
